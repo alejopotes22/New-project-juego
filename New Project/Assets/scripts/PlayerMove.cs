@@ -1,30 +1,60 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
-    private Rigidbody2D Rigidbody2D;
-    float horizontal;
-    public float speed = 5f;
+    private Rigidbody2D _Rigidbody2D;
+    private Animator animator;
 
+    public float horizontal;
+    public float vertical;   // por ahora no se usa, puede servir luego para salto
+    public float speed = 1f;
+    public float jumpForce = 0.2f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private bool isJumping = false;
+
     void Start()
     {
-        Rigidbody2D=GetComponent<Rigidbody2D>();
+        _Rigidbody2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Movimiento lateral
         horizontal = Input.GetAxisRaw("Horizontal");
+
+        // Animación de correr (Idle ↔ Run)
+        animator.SetFloat("speed", Mathf.Abs(horizontal));
+
+        // Salto
+        if (Input.GetButtonDown("Jump") && !isJumping)
+        {
+            _Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            animator.SetBool("isJumping", true);
+            isJumping = true;
+        }
     }
 
     private void FixedUpdate()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        Rigidbody2D.linearVelocity = new Vector2(horizontal * 5f, Rigidbody2D.linearVelocity.y);
+        _Rigidbody2D.linearVelocity = new Vector2(horizontal * speed, _Rigidbody2D.linearVelocity.y);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+            animator.SetBool("isJumping", false);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Flag"))
+        {
+            SceneManager.LoadScene("Scena 2"); // 👈 usa el nombre exacto de tu escena
+        }
+    }
 }
-
 

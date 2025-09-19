@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
 
 
 
-
     public float GlobalTime { get => globalTime; set => globalTime = value; }
     public int ScoreApple { get => scoreApple; set => scoreApple = value; }
     public int ScoreBanana { get => scoreBanana; set => scoreBanana = value; }

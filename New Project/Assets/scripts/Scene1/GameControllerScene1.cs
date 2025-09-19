@@ -33,7 +33,6 @@ public class GameControllerScene1 : MonoBehaviour
 
 
 
-
     }
 
     public void AddTime()
