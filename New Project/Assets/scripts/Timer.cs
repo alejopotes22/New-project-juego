@@ -23,10 +23,13 @@ public class Timer : MonoBehaviour
     private float timerTime;
     private bool isRunning = false;
 
+   
+
     // Use this for initialization
     void Start()
     {
-        TimerReset();
+        //TimerReset();
+        TimerStart();
     }
 
     public void TimerStart()
@@ -80,4 +83,8 @@ public class Timer : MonoBehaviour
             timerSeconds100.text = (seconds100Int < 10) ? "0" + seconds100Int : seconds100Int.ToString();
         }
     }
+
+    public float StartTime { get => startTime; set => startTime = value; }
+    public float StopTime { get => stopTime; set => stopTime = value; }
+    public float TimerTime { get => timerTime; set => timerTime = value; }
 }
