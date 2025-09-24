@@ -2,43 +2,57 @@ using UnityEngine;
 
 public class CollectibleItem : MonoBehaviour
 {
-
     public enum ItemType { Apple, Banana }
 
-    //[Header("Opciones de items")]
     public ItemType type = ItemType.Apple;
     public int itemValue = 1;
 
+    [Header("Audio")]
+    public AudioClip appleClip;
+    public AudioClip bananaClip;
+    private AudioSource audioSource;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (!collision.CompareTag("Player")) return;
 
         switch (type)
         {
             case ItemType.Apple:
-                GameManager.Instance.TotalApple(itemValue); break;
+                GameManager.Instance.TotalApple(itemValue);
+                PlaySound(appleClip);
+                break;
 
             case ItemType.Banana:
-                GameManager.Instance.TotalBanana(itemValue); break;
+                GameManager.Instance.TotalBanana(itemValue);
+                PlaySound(bananaClip);
+                break;
         }
 
-        Destroy(gameObject);
-
-
+        // destruye el objeto después de que termine el sonido
+        Destroy(gameObject, 0.2f);
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
 
+            audioSource.volume = 1f; // máximo volumen (ajústalo entre 0.0 y 1.0)
+            audioSource.priority = 50; // menor número = mayor prioridad
+
+            audioSource.PlayOneShot(clip);
+        }
+    }
 }
+

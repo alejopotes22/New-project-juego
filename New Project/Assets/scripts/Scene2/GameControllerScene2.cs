@@ -45,4 +45,12 @@ public class GameControllerScene2 : MonoBehaviour
         Debug.Log("Tiempo Escena 1 " + GameManager.Instance.GlobalTime);
     }
 
+
+
+ 
+
+
+
+
+
 }
